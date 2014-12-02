@@ -5,6 +5,17 @@ A project to help me understand what is required to provide data for an NSOutlin
 
 First up I'll try to get the File system example from the Outline View Programming Guide.
 
+## NSOutlineViewInSwift Project
+
+Option			| Setting
+----------		| -----
+Table Type		| NSOutlineView
+Content View	| Cell Based
+Language 		| Swift
+IB Method		| Storyboard
+Example	from	| [Outline View Programming Topics](https://developer.apple.com/library/mac/Documentation/Cocoa/Conceptual/OutlineView/OutlineView.html)
+
+
 Steps followed to create the demo (Using Mac OS X Yosemite 10.10.1 and XCode 6)
 - Created a new Swift project (Using storyboards cause I like them)
 - Add a source list to the content view that has already been created (it is controlled by the ViewController class that has also already been created by the template).
@@ -32,4 +43,24 @@ Steps followed to create the demo (Using Mac OS X Yosemite 10.10.1 and XCode 6)
 - In IB select the NSOutlineView (3 clicks). In the Attributes Inspector you can set the Content mode to Cell Based.
 
 Now the application should run and show you the file system in the outline view.
+
+
+## NSOutlineViewUsingViewMode Project
+
+Option			| Setting
+----------		| -----
+Table Type		| NSOutlineView
+Content View	| View Based
+Language 		| Swift
+IB Method		| Storyboard
+Example	from	| [Outline View Programming Topics](https://developer.apple.com/library/mac/Documentation/Cocoa/Conceptual/OutlineView/OutlineView.html)
+
+There is a version of the same program which uses a view based outline view instead of a cell based view. It should operate exactly the same despite this difference. What needed to be changed between the two programs is listed below
+
+- In IB set the Content Mode for the Outline View to View Based (this is the default)
+- The datasource method objectValueForTableColumn: is no longer used. Instead the delegate method viewForTableColumn: is used to generate the content in each row/column. Inside this method we need to create a view to be displayed using makeViewWithIdentifier (look up NSTableView to find it).
+- In IB you need to set the Identifier for your NSTableCellView to the string that you used in makeViewWithIdentifier (something like "DataCell")
+
+The application should then run the same as the Cell based version.
+
 
