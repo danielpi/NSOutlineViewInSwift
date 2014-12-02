@@ -64,3 +64,19 @@ There is a version of the same program which uses a view based outline view inst
 The application should then run the same as the Cell based version.
 
 
+## NSSourceListInSwift Project
+
+Option			| Setting
+----------		| -----
+Table Type		| Source List (NSOutlineView)
+Content View	| View Based
+Language 		| Swift
+IB Method		| Storyboard
+Example	from	| Me
+
+Source list views are a little different from regular NSOutlineViews because they are often used to display groups of quite different objects. For instance in the Finder we have Favourites (Finder folders), Devices, Shared and Tags are all shown in the one Source List. For this reason I feel we should be able to map very different model objects into a source list without making everything come from the same base ItemClass. This has proven to be quite difficult for me to master.
+
+Some of the issues and points of interest are
+- It is important that every object in the model that will be displayed in the source list can be identified and can be used to create a table cell view by itself. The Genus and Species class in the project are good examples, the fauna array in the ViewController is a bad example (because it is hard to identify it from another array when it is passed in to the datasource methods).
+- If the model objects don't subclass NSObject the program tends to crash.
+- You can use arrays as the top container classes of your source list groupings, but it probably isn't a good idea. If you do (as I have done in this example) then you should use NSMutableArray rather than Swift arrays (it would crash for me using swift arrays).
