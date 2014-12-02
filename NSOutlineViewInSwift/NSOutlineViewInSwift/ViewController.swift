@@ -21,49 +21,72 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
         // Update the view, if already loaded.
         }
     }
-    /*
-    @implementation DataSource
-    // Data Source methods
     
-    - (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
-    
-    return (item == nil) ? 1 : [item numberOfChildren];
-    }
-    
-    
-    - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
-    return (item == nil) ? YES : ([item numberOfChildren] != -1);
-    }
-    
-    
-    - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item {
-    
-    return (item == nil) ? [FileSystemItem rootItem] : [(FileSystemItem *)item childAtIndex:index];
-    }
-    
-    
-    - (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
-    return (item == nil) ? @"/" : [item relativePath];
-    }
-    
-    @end
-    */
     
     func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
-        return self
+        // return (item == nil) ? [FileSystemItem rootItem] : [(FileSystemItem *)item childAtIndex:index];
+        if let it = item as? FileSystemItem {
+            return it.childAtIndex(index)!
+        } else {
+            return FileSystemItem.rootItem
+        }
     }
     
     func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
-        return false
+        // return (item == nil) ? YES : ([item numberOfChildren] != -1);
+        if let it = item as? FileSystemItem {
+            if it.numberOfChildren() != -1 {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return true
+        }
     }
     
     func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
-        return 0
+        // return (item == nil) ? 1 : [item numberOfChildren];
+        if let it = item as? FileSystemItem {
+            return it.numberOfChildren()
+        }
+        return 1
     }
     
-    func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
+    func outlineView(outlineView: NSOutlineView, objectValueForTableColumn: NSTableColumn?, byItem:AnyObject?) -> AnyObject? {
+        // return (item == nil) ? @"/" : [item relativePath];
+        if let item = byItem as? FileSystemItem {
+            return item.relativePath
+        }
         return nil
     }
 
 }
 
+/*
+@implementation DataSource
+// Data Source methods
+
+- (NSInteger)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
+
+return (item == nil) ? 1 : [item numberOfChildren];
+}
+
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+return (item == nil) ? YES : ([item numberOfChildren] != -1);
+}
+
+
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item {
+
+return (item == nil) ? [FileSystemItem rootItem] : [(FileSystemItem *)item childAtIndex:index];
+}
+
+
+- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {
+return (item == nil) ? @"/" : [item relativePath];
+}
+
+@end
+*/

@@ -12,7 +12,7 @@ public class FileSystemItem: NSObject {
     
     var relativePath: NSString
     var parent: FileSystemItem?
-    var children: [FileSystemItem]? {
+    lazy var children: [FileSystemItem]? = {
         let fileManager = NSFileManager.defaultManager()
         let fullPath = self.fullPath()
         var isDir = ObjCBool(false)
@@ -32,7 +32,7 @@ public class FileSystemItem: NSObject {
         } else {
             return  nil
         }
-    }
+    }()
     
     init(path: NSString, parent: FileSystemItem?) {
         self.relativePath = path.lastPathComponent.copy() as NSString
@@ -61,10 +61,16 @@ public class FileSystemItem: NSObject {
     }
     
     public func fullPath() -> NSString {
-        return "Hello"
+        // If no parent, return our own relative path
+        if let par = parent {
+            // recurse up the hierarchy, prepending each parent’s path
+            return par.fullPath().stringByAppendingPathComponent(relativePath)
+        } else {
+            return relativePath
+        }
     }
-    
-    
+
+
 }
 
 /*
