@@ -8,7 +8,7 @@
 
 import Cocoa
 
-public class FileSystemItem: NSObject {
+public class FileSystemItem: NSObject, Printable {
     
     var relativePath: NSString
     var parent: FileSystemItem?
@@ -33,6 +33,10 @@ public class FileSystemItem: NSObject {
             return  nil
         }
     }()
+    
+    public override var description: String {
+        return "FileSystemItem:\(relativePath)"
+    }
     
     init(path: NSString, parent: FileSystemItem?) {
         self.relativePath = path.lastPathComponent.copy() as NSString
