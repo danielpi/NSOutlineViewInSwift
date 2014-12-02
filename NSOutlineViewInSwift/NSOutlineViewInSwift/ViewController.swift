@@ -35,7 +35,7 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
         // return (item == nil) ? YES : ([item numberOfChildren] != -1);
         if let it = item as? FileSystemItem {
-            if it.numberOfChildren() != -1 {
+            if it.numberOfChildren() > 0 {
                 return true
             } else {
                 return false
