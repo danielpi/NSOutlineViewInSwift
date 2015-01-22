@@ -121,5 +121,14 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
 
     }
     
+    func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
+        switch item {
+        case let f as [Genus]:
+            return true
+        default:
+            return false
+        }
+    }
+    
 }
 
