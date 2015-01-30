@@ -10,8 +10,10 @@ import Cocoa
 
 class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewDataSource {
     
-    var fauna: NSMutableArray = NSMutableArray() // Need to use NSMutableArray instead of [Genus]
+    //var fauna: NSMutableArray = NSMutableArray() // Need to use NSMutableArray instead of [Genus]
     //var flora: [Genus] = [Genus]()
+    var fauna = Life(name: "Fauna")
+    let flora = Life(name: "Flora")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +23,15 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
         let lion = Species(name: "Lion", icon: NSImage(named: "Lion"), genus: panthera)
         let tiger = Species(name: "Tiger", icon: NSImage(named: "Tiger"), genus: panthera)
         let leopard = Species(name: "Leopard", icon: NSImage(named: "Leopard"), genus: panthera)
-        fauna.addObject(panthera)
+        fauna.genus.append(panthera)
         let antigonia = Genus(name: "Antigonia", icon: NSImage(named:"Antigonia"))
         let capros = Species(name: "Capros", icon:nil, genus: antigonia)
         let eos = Species(name: "Eos", icon:nil, genus: antigonia)
-        fauna.addObject(antigonia)
+        fauna.genus.append(antigonia)
         
         let banksia = Genus(name: "Banksia", icon: nil)
         let serrata = Species(name: "Serrata", icon:nil, genus: banksia)
-        //flora.append(banksia)
+        flora.genus.append(banksia)
     }
     
     override var representedObject: AnyObject? {
@@ -44,8 +46,8 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
         println("child:ofItem")
         if let it: AnyObject = item {
             switch it {
-            case let f as [Genus]: // This works even though NSMutableArray is more accurate
-                return f[index]
+            case let l as Life: // This works even though NSMutableArray is more accurate
+                return l.genus[index]
             case let genus as Genus:
                 return genus.species[index]
             default:
@@ -53,15 +55,20 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
                 return self
             }
         } else {
-            return fauna
+            switch index {
+            case 0:
+                return fauna
+            default:
+                return flora
+            }
         }
     }
     
     func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
         println("isItemExpandable")
         switch item {
-        case let f as [Genus]:
-            return true
+        case let l as Life:
+            return (l.genus.count > 0) ? true : false
         case let genus as Genus:
             return (genus.species.count > 0) ? true : false
         default:
@@ -74,15 +81,15 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
         if let it: AnyObject = item {
             println("\(it)")
             switch it {
-            case let f as NSMutableArray:
-                return f.count
+            case let l as Life:
+                return l.genus.count
             case let genus as Genus:
                 return genus.species.count
             default:
                 return 0
             }
         } else {
-            return 1
+            return 2 // Flora and Fauna
         }
     }
     
@@ -91,10 +98,10 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
         println("viewForTableColumn")
         switch item {
-        case let f as [Genus]:
+        case let l as Life:
             let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as NSTableCellView
             if let textField = view.textField {
-                textField.stringValue = "FAUNA"
+                textField.stringValue = l.name
             }
             return view
         case let genus as Genus:
@@ -123,7 +130,7 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     
     func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
         switch item {
-        case let f as [Genus]:
+        case let l as Life:
             return true
         default:
             return false

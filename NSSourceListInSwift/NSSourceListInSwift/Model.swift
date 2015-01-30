@@ -15,6 +15,15 @@ import Cocoa
 // ViewController is a bad example.
 
 // If the model objects don't subclass NSObject the program tends to crash.
+class Life: NSObject {
+    let name: String
+    var genus: [Genus] = []
+    let icon: NSImage?
+    
+    init(name: String) {
+        self.name = name
+    }
+}
 class Genus: NSObject {
     let name: String
     var species: [Species] = []
