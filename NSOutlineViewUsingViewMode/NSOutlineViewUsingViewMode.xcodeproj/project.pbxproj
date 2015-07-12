@@ -156,6 +156,7 @@
 		E6FFDF6B1A2D733800125DE8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Electronic Innovations";
 				TargetAttributes = {
@@ -401,6 +402,7 @@
 				E6FFDF911A2D733800125DE8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E6FFDF921A2D733800125DE8 /* Build configuration list for PBXNativeTarget "NSOutlineViewUsingViewModeTests" */ = {
 			isa = XCConfigurationList;
@@ -409,6 +411,7 @@
 				E6FFDF941A2D733800125DE8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -43,7 +43,7 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     
     
     func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
-        println("child:ofItem")
+        print("child:ofItem")
         if let it: AnyObject = item {
             switch it {
             case let l as Life: // This works even though NSMutableArray is more accurate
@@ -65,7 +65,7 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     }
     
     func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
-        println("isItemExpandable")
+        print("isItemExpandable")
         switch item {
         case let l as Life:
             return (l.genus.count > 0) ? true : false
@@ -77,9 +77,9 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     }
     
     func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
-        println("numberOfChildrenOfItem")
+        print("numberOfChildrenOfItem")
         if let it: AnyObject = item {
-            println("\(it)")
+            print("\(it)")
             switch it {
             case let l as Life:
                 return l.genus.count
@@ -96,16 +96,16 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     
     // NSOutlineViewDelegate
     func outlineView(outlineView: NSOutlineView, viewForTableColumn: NSTableColumn?, item: AnyObject) -> NSView? {
-        println("viewForTableColumn")
+        print("viewForTableColumn")
         switch item {
         case let l as Life:
-            let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as NSTableCellView
+            let view = outlineView.makeViewWithIdentifier("HeaderCell", owner: self) as! NSTableCellView
             if let textField = view.textField {
                 textField.stringValue = l.name
             }
             return view
         case let genus as Genus:
-            let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as NSTableCellView
+            let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView
             if let textField = view.textField {
                 textField.stringValue = genus.name
             }
@@ -114,7 +114,7 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
             }
             return view
         case let species as Species:
-            let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as NSTableCellView
+            let view = outlineView.makeViewWithIdentifier("DataCell", owner: self) as! NSTableCellView
             if let textField = view.textField {
                 textField.stringValue = species.name
             }

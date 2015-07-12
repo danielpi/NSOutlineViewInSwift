@@ -8,19 +8,24 @@
 
 import Cocoa
 
-public class FileSystemItem: NSObject, Printable {
+public class FileSystemItem: NSObject {
     
-    var relativePath: NSString
+    var relativePath: String
     var parent: FileSystemItem?
     lazy var children: [FileSystemItem]? = {
         let fileManager = NSFileManager.defaultManager()
         let fullPath = self.fullPath()
         var isDir = ObjCBool(false)
-        let valid = fileManager.fileExistsAtPath(fullPath, isDirectory: &isDir)
+        let valid = fileManager.fileExistsAtPath(fullPath as String, isDirectory: &isDir)
         var newChildren: [FileSystemItem] = []
         
         if (valid && isDir.boolValue) {
-            let array = fileManager.contentsOfDirectoryAtPath(fullPath, error: nil)
+            let array: [AnyObject]?
+            do {
+                array = try fileManager.contentsOfDirectoryAtPath(fullPath as String)
+            } catch _ {
+                array = nil
+            }
             
             if let ar = array as? [String] {
                 for contents in ar {
@@ -39,7 +44,7 @@ public class FileSystemItem: NSObject, Printable {
     }
     
     init(path: NSString, parent: FileSystemItem?) {
-        self.relativePath = path.lastPathComponent.copy() as NSString
+        self.relativePath = path.lastPathComponent.copy() as! String
         self.parent = parent
     }
     
@@ -66,14 +71,23 @@ public class FileSystemItem: NSObject, Printable {
     
     public func fullPath() -> NSString {
         // If no parent, return our own relative path
+        print("relativePath: \(relativePath)")
         if let par = parent {
             // recurse up the hierarchy, prepending each parent’s path
-            return par.fullPath().stringByAppendingPathComponent(relativePath)
+            return par.fullPath().stringByAppendingPathComponent(relativePath as String)
         } else {
             return relativePath
         }
     }
-
+    public func full2Path() -> String {
+        // If no parent, return our own relative path
+        if let par = parent {
+            // recurse up the hierarchy, prepending each parent’s path
+            return par.fullPath().stringByAppendingPathComponent(relativePath as String)
+        } else {
+            return (relativePath == "/") ? relativePath : "/" + (relativePath as String)
+        }
+    }
 
 }
 

@@ -18,7 +18,7 @@ import Cocoa
 class Life: NSObject {
     let name: String
     var genus: [Genus] = []
-    let icon: NSImage?
+    let icon: NSImage? = nil
     
     init(name: String) {
         self.name = name
