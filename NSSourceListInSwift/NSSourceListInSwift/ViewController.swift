@@ -10,6 +10,7 @@ import Cocoa
 
 class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewDataSource {
     
+    @IBOutlet weak var sourceView: NSOutlineView!
     //var fauna: NSMutableArray = NSMutableArray() // Need to use NSMutableArray instead of [Genus]
     //var flora: [Genus] = [Genus]()
     var fauna = Life(name: "Fauna")
@@ -32,6 +33,9 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
         let banksia = Genus(name: "Banksia", icon: nil)
         let serrata = Species(name: "Serrata", icon:nil, genus: banksia)
         flora.genus.append(banksia)
+        
+        sourceView.expandItem(sourceView.itemAtRow(0))
+        sourceView.expandItem(sourceView.itemAtRow(3))
     }
     
     override var representedObject: AnyObject? {
@@ -130,12 +134,21 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
     
     func outlineView(outlineView: NSOutlineView, isGroupItem item: AnyObject) -> Bool {
         switch item {
-        case let l as Life:
+        case _ as Life:
             return true
         default:
             return false
         }
     }
     
+    func outlineView(outlineView: NSOutlineView, shouldCollapseItem item: AnyObject) -> Bool {
+        print("shouldCollapseItem \(item)")
+        return outlineView.rowForItem(item) != 0
+    }
+    
+    /*func outlineView(outlineView: NSOutlineView, shouldExpandItem item: AnyObject) -> Bool {
+        print("shouldExpandItem \(item)")
+        return true
+    }*/
 }
 
