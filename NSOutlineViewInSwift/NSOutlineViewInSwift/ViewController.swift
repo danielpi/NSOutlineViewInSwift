@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewDataSource {
+class ViewController: NSViewController {
     
     @IBOutlet var outlineView: NSOutlineView!
     
@@ -19,59 +19,58 @@ class ViewController: NSViewController, NSOutlineViewDelegate, NSOutlineViewData
         outlineView.headerView = nil
     }
 
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
-    
+}
+
+
+// MARK:- Outline View Data Source
+
+extension ViewController: NSOutlineViewDataSource {
     
     func outlineView(outlineView: NSOutlineView, child index: Int, ofItem item: AnyObject?) -> AnyObject {
         // return (item == nil) ? [FileSystemItem rootItem] : [(FileSystemItem *)item childAtIndex:index];
-        if let it = item as? FileSystemItem {
-            print("child: \(index) ofItem: \(it)")
-            return it.childAtIndex(index)!
-        } else {
+        
+        guard let fileSystemItem = item as? FileSystemItem else {
             print("child:ofItem: return the rootItem")
             return FileSystemItem.rootItem
         }
+        
+        print("child: \(index) ofItem: \(fileSystemItem)")
+        return fileSystemItem.childAtIndex(index)!
     }
     
     func outlineView(outlineView: NSOutlineView, isItemExpandable item: AnyObject) -> Bool {
         // return (item == nil) ? YES : ([item numberOfChildren] != -1);
-        if let it = item as? FileSystemItem {
-            if it.numberOfChildren() > 0 {
-                print("isItemExpandable: \(it): Yes")
-                return true
-            } else {
-                print("isItemExpandable: \(it): No")
-                return false
-            }
-        } else {
-            print("isItemExpandable: rootItem: Yes")
+        
+        guard let fileSystemItem = item as? FileSystemItem else {
+            // This is the root item which is always expandable
             return true
         }
+        
+        return fileSystemItem.numberOfChildren() > 0
     }
     
     func outlineView(outlineView: NSOutlineView, numberOfChildrenOfItem item: AnyObject?) -> Int {
         // return (item == nil) ? 1 : [item numberOfChildren];
-        if let it = item as? FileSystemItem {
-            print("numberOfChildrenOfItem: \(it.numberOfChildren())")
-            return it.numberOfChildren()
+        
+        guard let fileSystemItem = item as? FileSystemItem else {
+            print("numberOfChildrenOfItem: We have been passed the root object so we return 1")
+            return 1
         }
-        print("numberOfChildrenOfItem: We have been passed the root object so we return 1")
-        return 1
+        
+        print("numberOfChildrenOfItem: \(fileSystemItem.numberOfChildren())")
+        return fileSystemItem.numberOfChildren()
     }
     
     func outlineView(outlineView: NSOutlineView, objectValueForTableColumn: NSTableColumn?, byItem:AnyObject?) -> AnyObject? {
         // return (item == nil) ? @"/" : [item relativePath];
-        if let item = byItem as? FileSystemItem {
-            print("objectValueForTableColumn:byItem: \(item)")
-            return item.relativePath
+        
+        guard let fileSystemItem = byItem as? FileSystemItem else {
+            return nil
         }
-        return nil
+        
+        print("objectValueForTableColumn:byItem: \(fileSystemItem)")
+        return fileSystemItem.relativePath
     }
-
 }
 
 /*

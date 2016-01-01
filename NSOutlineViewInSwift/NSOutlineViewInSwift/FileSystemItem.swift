@@ -12,6 +12,7 @@ public class FileSystemItem: NSObject {
     
     var relativePath: String
     var parent: FileSystemItem?
+    
     lazy var children: [FileSystemItem]? = {
         let fileManager = NSFileManager.defaultManager()
         let fullPath = self.fullPath()
@@ -55,40 +56,19 @@ public class FileSystemItem: NSObject {
     }
     
     public func numberOfChildren() -> Int {
-        if let children = children {
-            return children.count
-        }
-        return 0
+        guard let children = self.children else { return 0 }
+        return children.count
     }
     
     public func childAtIndex(n: Int) -> FileSystemItem? {
-        if let children = children {
-            return children[n]
-        } else {
-            return nil
-        }
+        guard let children = self.children else { return nil }
+        return children[n]
     }
     
     public func fullPath() -> NSString {
-        // If no parent, return our own relative path
-        print("relativePath: \(relativePath)")
-        if let par = parent {
-            // recurse up the hierarchy, prepending each parent’s path
-            return par.fullPath().stringByAppendingPathComponent(relativePath as String)
-        } else {
-            return relativePath
-        }
+        guard let parent = self.parent else { return relativePath }
+        return parent.fullPath().stringByAppendingPathComponent(relativePath as String)
     }
-    public func full2Path() -> String {
-        // If no parent, return our own relative path
-        if let par = parent {
-            // recurse up the hierarchy, prepending each parent’s path
-            return par.fullPath().stringByAppendingPathComponent(relativePath as String)
-        } else {
-            return (relativePath == "/") ? relativePath : "/" + (relativePath as String)
-        }
-    }
-
 }
 
 /*
